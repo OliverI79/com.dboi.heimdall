@@ -44,6 +44,7 @@
             "checkContactAtArming": "Check for open door(s)/window(s) when arming",
             "checkbeforecountdown": "Perform Pre-Arming check before Arming Delay",
             "usezonenames": "Use zone names",
+			"nologmotionend": "Do not log motion ending",
             "zone": "Zone",
             "device": "Device",
             "monitor": "Monitor",

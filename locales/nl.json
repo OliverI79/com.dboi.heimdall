@@ -44,6 +44,7 @@
             "checkContactAtArming": "Controleer op open deuren/ramen bij het inschakelen",
             "checkbeforecountdown": "Voer inschakelcontrole uit voor de inschakelvertraging",
             "usezonenames": "Gebruik zonenamen",
+			"nologmotionend": "Log geen bewegingseinde",
             "zone": "Zone",
             "device": "Apparaat",
             "monitor": "Controleer",

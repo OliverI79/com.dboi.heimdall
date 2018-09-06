@@ -49,7 +49,8 @@ var defaultSettings = {
     "spokenDoorOpen": false,
     "spokenMotionAtArming": false,
     "spokenDoorOpenAtArming": false,
-	"useZoneNames": false
+	"useZoneNames": false,
+	"noLogMotionEnd": false
 };
 var allDevices;
 var devicesMonitored = [];
@@ -859,6 +860,12 @@ function stateChange(device,state,sensorType) {
             shouldLog = false;
             console.log('logTrue is true and sensorstate is false, so no log line')
         }
+		
+		if ( heimdallSettings.noLogMotionEnd && sensorType == 'motion' && !sensorState) {
+            shouldLog = false;
+            console.log('Log of no motion detection is disabled')
+		}
+		
         if ( shouldLog ) {
             writeLog(logLine)        
         }

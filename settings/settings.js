@@ -25,7 +25,8 @@ var defaultSettings = {
     "spokenMotionTrue": false,
     "spokenTamperTrue": false,
     "spokenDoorOpen": false,
-	"useZoneNames": false
+	"useZoneNames": false,
+	"noLogMotionEnd": false
 };
 
 function onHomeyReady(homeyReady){
@@ -64,6 +65,7 @@ function onHomeyReady(homeyReady){
         document.getElementById('spokenMotionAtArming').checked = heimdallSettings.spokenMotionAtArming;
         document.getElementById('spokenDoorOpenAtArming').checked = heimdallSettings.spokenDoorOpenAtArming;
         document.getElementById('useZoneNames').checked = heimdallSettings.useZoneNames;
+        document.getElementById('noLogMotionEnd').checked = heimdallSettings.noLogMotionEnd;
         if ( document.getElementById('autoRefresh').checked ) {
             document.getElementById("buttonRefresh").style = "display:none";
         } else {
@@ -415,6 +417,7 @@ function saveSettings() {
     heimdallSettings.spokenMotionAtArming = document.getElementById('spokenMotionAtArming').checked;
     heimdallSettings.spokenDoorOpenAtArming = document.getElementById('spokenDoorOpenAtArming').checked;
     heimdallSettings.useZoneNames = document.getElementById('useZoneNames').checked;
+    heimdallSettings.noLogMotionEnd = document.getElementById('noLogMotionEnd').checked;
     if ( heimdallSettings.spokenMotionAtArming ) {
         document.getElementById('checkMotionAtArming').checked = true
         heimdallSettings.checkMotionAtArming = true
