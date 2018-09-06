@@ -1,0 +1,472 @@
+{
+	"id": "com.uc.heimdall",
+	"sdk": 2,
+	"permissions": [ "homey:manager:api", "homey:manager:speech-output" ],
+	"name": { "en": "Heimdall"},
+	"description": { "en": "This app turns homey into a simple surveillance system" },
+	"category": [ "security", "tools" ],
+	"images": { "large": "assets/images/large.png", "small": "assets/images/small.png" },
+	"version": "1.0.18",
+	"compatibility": "1.x >=1.5.0",
+	"author": { "name": "Danee de Kruyff", "email": "daneedekruyff@outlook.com" },
+	"contributors": {
+		"developers": [{"name": "Danee de Kruyff","email": "daneedekruyff@outlook.com"}]
+	},
+	"contributing": {
+		"donate": {
+		  "paypal": {
+			"username": "daneedekruyff"
+		  }
+		}
+	  },
+	"tags": { 
+		"en": [ "Home", "Alarm", "Homeyalarm", "System", "Tools", "Log", "Surveillance"],
+		"nl": [ "Huis", "Alarm", "Homeyalarm", "Systeem", "Beveilig", "Beveiliging", "Toezicht"] 
+	},
+	"athomForumDiscussionId": 4514,
+	"homeyCommunityTopicId": 134,
+	"flow": {
+		"triggers": [
+		{
+			"id": "SurveillanceChanged",
+			"title": {
+				"en": "Surveillance Mode changed.",
+				"nl": "Toezicht modus is gewijzigd."
+			},
+			"tokens": [
+				{
+					"name": "mode",
+					"type": "string",
+					"title": {
+						"en": "Surveillance Mode",
+						"nl": "Toezicht Modus"
+					},
+					"example": "Disarmed"
+				}
+			]
+		},
+		{
+			"id": "sensorActiveAtArming",
+			"title": {
+				"en": "Sensor active at arming.",
+				"nl": "sensor actief bij inschakelen."
+			},
+			"tokens": [
+				{
+					"name": "warning",
+					"type": "string",
+					"title": {
+						"en": "Warning",
+						"nl": "Waarschuwing"
+					},
+					"example": "Warning"
+				}
+			]
+		},	
+		{
+			"id": "AlarmActivated",
+			"title": {
+				"en": "The alarm is activated.",
+				"nl": "Het alarm is geactiveerd."
+			},
+			"tokens": [
+				{
+					"name": "Reason",
+					"type": "string",
+					"title": {
+						"en": "Reason",
+						"nl": "Reden"
+					},
+					"example": "-"
+				},
+				{
+					"name": "Zone",
+					"type": "string",
+					"title": {
+						"en": "Zone",
+						"nl": "Zone"
+					},
+					"example": "-"
+				}
+			]
+		},
+		{
+			"id": "AlarmDeactivated",
+			"title": {
+				"en": "The alarm is deactivated.",
+				"nl": "Het alarm is gedeactiveerd."
+			},
+			"tokens": [
+				{
+					"name": "Source",
+					"type": "string",
+					"title": {
+						"en": "Source",
+						"nl": "Bron"
+					},
+					"example": "-"
+				}
+			]
+		},
+		{
+			"id": "DelayActivated",
+			"title": {
+				"en": "The delay is activated.",
+				"nl": "De vertraging is geactiveerd."
+			},
+			"tokens": [
+				{
+					"name": "Reason",
+					"type": "string",
+					"title": {
+						"en": "Reason",
+						"nl": "Reden"
+					},
+					"example": "-"
+				},
+				{
+					"name": "Duration",
+					"type": "number",
+					"title": {
+						"en": "Duration",
+						"nl": "Duur"
+					},
+					"example": 30
+				}
+			]
+		},
+		{
+			"id": "TimeTillAlarm",
+			"title":{
+				"en": "The time untill alarm changed",
+				"nl": "De tijd tot alarm wijzigt"
+			},
+			"tokens": [
+				{
+					"name": "AlarmTimer",
+					"type": "number",
+					"title": {
+						"en": "Seconds untill alarm",
+						"nl": "Seconden tot alarm"
+					},
+					"example": 30
+				}
+			]
+		},
+		{
+			"id": "TimeTillArmed",
+			"title":{
+				"en": "The time untill armed changed",
+				"nl": "De tijd tot geactiveerd wijzigt"
+			},
+			"tokens": [
+				{
+					"name": "ArmedTimer",
+					"type": "number",
+					"title": {
+						"en": "Seconds untill armed",
+						"nl": "Seconden tot armed"
+					},
+					"example": 30
+				}
+			]
+		},
+		{
+			"id": "LogLineWritten",
+			"title":{
+				"en": "A logline was written",
+				"nl": "Een logregel is geschreven"
+			},
+			"tokens": [
+				{
+					"name": "Device",
+					"type": "string",
+					"title": {
+						"en": "Device",
+						"nl": "Apparaat"
+					},
+					"example": "Motion Sensor"
+				},
+				{
+					"name": "State",
+					"type": "string",
+					"title": {
+						"en": "State",
+						"nl": "Satus"
+					},
+					"example": "Motion detected"
+				}
+			]
+		}
+		],
+		"conditions": [
+			{
+				"id": "SurveillanceIs",
+				"title": {
+					"en": "Surveillance mode is !{{ |not }}",
+					"nl": "Toezicht mode is !{{ |niet }}"
+				},
+				"args": [
+					{
+					  	"name": "surveillance",
+					  	"type": "dropdown",
+					  	"values": [
+							{
+								"id": "armed",
+								"label": {
+									"en": "Armed",
+									"nl": "Geactiveerd"
+								}
+							},
+						  	{
+								"id": "disarmed",
+								"label": {
+									"en": "Disarmed",
+									"nl": "Gedeactiveerd"
+								}
+						  	},
+						  	{
+								"id": "partially_armed",
+								"label": {
+									"en": "Partially Armed",
+									"nl": "Deels geactiveerd"
+								}
+						  	}
+					  	]
+					}
+				]
+			},
+			{
+				"id": "ArmingCountdown",
+				"title": {
+					"en": "Arming countdown !{{active |not active}}",
+					"nl": "Inschakel vertraging !{{actief |niet actief}}"
+				}
+			},
+			{
+				"id": "AlarmCountdown",
+				"title": {
+					"en": "Alarm countdown !{{active |not active}}",
+					"nl": "Alarm vertraging !{{actief |niet actief}}"
+				}
+			},
+			{
+				"id": "AlarmActive",
+				"title": {
+					"en": "Alarm state is !{{active |not active}}",
+					"nl": "Alarm status is !{{actief |niet actief}}"
+				}
+			}
+		],
+		"actions": [
+		{
+			"id": "SetSurveillance",
+			"title": {
+				"en": "Set Surveillance Mode",
+				"nl": "Stel Toezicht Modus in"
+			},
+			"args": [
+				{
+					  "name": "surveillance",
+					  "type": "dropdown",
+					  "values": [
+						{
+							"id": "armed",
+							"label": {
+								"en": "Armed",
+								"nl": "Geactiveerd"
+							}
+						},
+						  {
+							"id": "disarmed",
+							"label": {
+								"en": "Disarmed",
+								"nl": "Gedeactiveerd"
+							}
+						  },
+						  {
+							"id": "partially_armed",
+							"label": {
+								"en": "Partially Armed",
+								"nl": "Deels geactiveerd"
+							}
+						  }
+					  ]
+				},
+				{
+					"name": "device",
+					"type": "device",
+					"filter": "driver_id=surveillanceModeSwitch"
+				}
+			]
+		},
+		{
+			"id": "SendInfo",
+			"title": {
+				"en": "Send information to Heimdall.",
+				"nl": "Stuur informatie naar Heimdall."
+			},
+			"args": [{
+				"name": "log",
+				"type": "text"
+			}]
+		},
+		{
+			"id": "ClearHistory",
+			"title": {
+				"en": "Clear Heimdall history.",
+				"nl": "Verwijder Heimdall geschiedenis."
+			}
+		},
+		{
+			"id": "ActivateAlarm",
+			"title": {
+				"en": "Activate Alarm",
+				"nl": "Activeer Alarm"
+			}
+		},
+		{
+			"id": "DeactivateAlarm",
+			"title": {
+				"en": "Deactivate Alarm",
+				"nl": "Deactiveer Alarm"
+			}
+		}
+		]
+	},
+	"capabilities": {
+		"alarm_heimdall": {
+            "type": "boolean",
+            "title": {
+				"en": "Alarm",
+				"nl": "Alarm"
+            },
+            "getable": true,
+            "setable": true
+		}
+	},
+	"drivers": [
+		{
+			"id": "surveillanceModeSwitch",
+			"name": {
+				"en": "Mode",
+				"nl": "Modus"
+				},
+			"images": {
+				"large": "drivers/surveillanceModeSwitch/assets/images/large.png",
+				"small": "drivers/surveillanceModeSwitch/assets/images/small.png"
+			},
+			"class": "other",
+			"capabilities": [ "homealarm_state", "alarm_heimdall" ],
+			"capabilitiesOptions":  {
+				"homealarm_state": {
+					"preventTag": true					
+				},
+				"alarm_heimdall": {
+					"preventTag": true
+				}
+			},
+			"pair": [
+				{
+					"id": "list_triggers",
+					"template": "list_devices",
+					"navigation": {
+						"next": "add_triggers"
+					}
+				},
+				{
+					"id": "add_triggers",
+					"template": "add_devices"
+				}
+			],
+			"mobile": {
+				"components": [
+					{
+						"id": "icon",
+						"capabilities": [ ]
+					},
+					{
+						"id": "picker",
+						"capabilities": [ "homealarm_state" ]
+					}
+				]
+			}
+		},
+		{
+			"id": "alarmOffSwitch",
+			"name": {
+				"en": "Alarm",
+				"nl": "Alarm"
+			},
+			"images": {
+				"large": "drivers/alarmOffSwitch/assets/images/large.png",
+				"small": "drivers/alarmOffSwitch/assets/images/small.png"
+			},
+			"class": "other",
+			"capabilities": [ "button", "alarm_heimdall" ],
+			"capabilitiesOptions":  {
+				"button": {
+					"title":{
+						"en": "Turn off",
+						"nl": "Schakel uit"
+					},
+					"preventTag": true
+				},
+				"alarm_heimdall": {
+					"preventTag": true,
+					"preventInsights": true
+				}
+			},
+			"pair": [
+				{
+					"id": "list_triggers",
+					"template": "list_devices",
+					"navigation": {
+						"next": "add_triggers"
+					}
+				},
+				{
+					"id": "add_triggers",
+					"template": "add_devices"
+				}
+			],
+			"mobile": {
+				"components": [
+					{
+						"id": "icon",
+						"capabilities": [ ]
+					},
+					{
+						"id": "sensor",
+						"capabilities": [ "alarm_heimdall" ],
+						"options": {
+							"icons": {
+								"alarm_heimdall": "drivers/alarmOffSwitch/assets/alarm.svg"
+							},
+							"alarm_heimdall": {
+								"noblink": false,
+								"invert": false, 
+								"label": {
+									"true": {
+										"en": "ALARM",
+										"nl": "ALARM"
+									},
+									"false": {
+										"en": "All is quiet",
+										"nl": "Alles ok"
+									}
+								}
+							}
+						}
+					},
+					{
+						"id": "button",
+						"capabilities": [ "button" ]
+					}
+				]
+			}
+
+		}
+
+	]
+}
